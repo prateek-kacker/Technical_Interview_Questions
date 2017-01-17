@@ -6,8 +6,8 @@ This is a temporary script file.
 """
 import collections
 def question1(s,t):
-    len_s= len(s)
-    len_t= len(t)
+    len_s= len(s) #Length of main string
+    len_t= len(t) #Length of string for anagram
     Link_list_t = Linked_list(t[0])
     for i in range(1,len_t):
         Link_list_t.append(t[i])
@@ -19,7 +19,7 @@ def question1(s,t):
                     return True
                 else:
                     return False
-        
+
 
 def check_ana(s,t):
     len_s=len(s)
