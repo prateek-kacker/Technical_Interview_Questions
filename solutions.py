@@ -8,17 +8,18 @@ import collections
 def question1(s,t):
     len_s= len(s) #Length of main string
     len_t= len(t) #Length of string for anagram
-    Link_list_t = Linked_list(t[0])
+    Link_list_t = Linked_list(t[0]) #Defining the first element of the linked list
     for i in range(1,len_t):
-        Link_list_t.append(t[i])
+        Link_list_t.append(t[i]) ## Filling the link list with characters of string
+### This block checks for anagram on the string
     for i in range(len_s):
         for j in range(len_t):
-            if s[i]==t[j]:
+            if s[i]==t[j]:  ### if the first letter matches then it can be anagram
                 output=check_ana(s[i:],Link_list_t)
                 if output == 1:
-                    return True
+                    return True ## Anagram found
                 else:
-                    return False
+                    return False ## Anagram found
 
 
 def check_ana(s,t): ## This function will find if there is anagrams. Its output is 1 if anagram is found
