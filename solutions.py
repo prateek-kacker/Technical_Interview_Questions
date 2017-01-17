@@ -21,10 +21,10 @@ def question1(s,t):
                     return False
 
 
-def check_ana(s,t):
+def check_ana(s,t): ## This function will find if there is anagrams. Its output is 1 if anagram is found
     len_s=len(s)
     for i in range(len_s):
-        t.search_and_delete(s[i])
+        t.search_and_delete(s[i]) # if found matching alphabet then remove it from the link list
         if t.empty() == 1:
             return 1
     return 0
