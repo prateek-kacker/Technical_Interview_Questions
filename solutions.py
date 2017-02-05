@@ -5,180 +5,107 @@ Spyder Editor
 This is a temporary script file.
 """
 import collections
+
+print "############################# Question 1 #####################################################"
+
 def question1(s,t):
-    len_s= len(s) #Length of main string
-    len_t= len(t) #Length of string for anagram
-    Link_list_t = Linked_list(t[0]) #Defining the first element of the linked list
-    for i in range(1,len_t):
-        Link_list_t.append(t[i]) ## Filling the link list with characters of string
-### This block checks for anagram on the string
-    for i in range(len_s):
-        for j in range(len_t):
-            if s[i]==t[j]:  ### if the first letter matches then it can be anagram
-                output=check_ana(s[i:],Link_list_t)
-                if output == 1:
-                    return True ## Anagram found
-                else:
-                    return False ## Anagram found
+    len_s=len(s) ## Finding the length of the string
+    len_t=len(t) ## Finding the length of the anagram 
+    for i in range(len_s-len_t+1): ### Searching on string till len(string)- len(anagram). This is done because we have to find the anagram of len(angaram)
+        output = check_ana(s[i:],t) ## Function which gives if the anagram is not
+        if output == True: ## The output is true then return true
+            return True
+    return False ## Return false if none of the output is true
 
+def check_ana(s,t): ## Checks for anagram
+    len_t = len(t) 
+    ana_t=t
+    for i in range(len_t): ## checks for string for only for length of anagram 
+        done = 0
+        for j in range(len_t-i):### it loops within the anagram
+            if done==0: #### checks the for a single letter in string with single letter in anagram
+                if s[i]==ana_t[j]: 
+                    ana_t=ana_t.replace(s[i],'',1) #### If there is a match then as linklist it removes the them
+                    done=1
+    if ana_t=="":
+        return True
+    else:
+        return False
+    
+print "Question1 s= prateek t=tar", question1('prateek','tar')
+print "Question1 s= prateek t=eet", question1('prateek','eet')
+print "Question1 s= prateek t=ra", question1('prateek','ra')
 
-def check_ana(s,t): ## This function will find if there is anagrams. Its output is 1 if anagram is found
-    len_s=len(s)
-    for i in range(len_s):
-        t.search_and_delete(s[i]) # if found matching alphabet then remove it from the link list
-        if t.empty() == 1:
-            return 1
-    return 0
+print "############################# Question 2 #####################################################"
 
-class Node(object):
-    def __init__ (self,value):
-        self.value = value
-        self.next = None
-class Linked_list(object):
-    def __init__ (self,head):
-        self.head= Node(head) 
-        self.last = self.head
-    def append(self,value):
-        second_last = self.last
-        second_last.next=Node(value)
-        self.last= second_last.next
-    def search_and_delete(self,search_term):
-        current=self.head
-        next_in_list=current.next
-        if current.value==search_term:
-            self.delete(None,current)
-            print "head is same"
-            self.print_list()
-        else:
-            while next_in_list != None:
-                if (next_in_list.value == search_term):
-                    """ error in this block. The idea is correct
-                    but delete function is not reducing nodes even though it
-                    written correctly. It is probably because we are not removing 
-                    in the tree. Look how tree is implemented in udacity"""
-                    self.delete(current,next_in_list) 
-                    print "after_head"
-                    self.print_list()
-                else:
-                    """ error in this block. The idea is correct
-                    but delete function is not reducing nodes even though it
-                    written correctly. It is probably because we are not removing 
-                    in the tree. Look how tree is implemented in udacity"""
-                    two_ahead_in_list = next_in_list.next
-                    current = next_in_list
-                    next_in_list=two_ahead_in_list
-    def empty(self):
-        if self.head==None:
-            return 1
-        else:
-            return 0
-
-    def delete(self,a,b):
-        if a == None:
-            """This block is working"""
-            print "a none b value",b.value
-            self.head = self.head.next
-        elif b.next == None:
-            """ error in this block. The idea is correct
-            but delete function is not reducing nodes even though it
-            written correctly. It is probably because we are not removing 
-            in the tree. Look how tree is implemented in udacity"""
-            print "B none a value",b.value
-            self.last=a
-            a.next=None
-        else:
-            """ error in this block. The idea is correct
-            but delete function is not reducing nodes even though it
-            written correctly. It is probably because we are not removing 
-            in the tree. Look how tree is implemented in udacity"""
-            print "within delete loop", a.value
-            print "within delete loop", b.value
-            a.next=b.next
-    def print_list(self):
-        print self.head.value," "
-        first=self.head
-        while first.next!=None:
-            print first.next.value," "
-            first=first.next
-
-def question2(s):
-    len_s = len(s)
-    dict_pal=dict()
-    for i in range(len_s):
-        for j in range(i+1,len_s+1):
-            reverse_str=reverse_string(s[i:j])
-            if reverse_str == s[i:j]:
-                if len(s[i:j]) not in dict_pal:
-                    dict_pal[len(s[i:j])]=s[i:j]
-    return dict_pal[max(dict_pal.keys(),key=int)]
-def reverse_string(s):
+def question2(s): ## Find if there are palindrome in the string
+    len_s = len(s) ###Lenght of the string
+    dict_pal=dict() ### Create a dictionary
+    for i in range(len_s): #### For the length of the string
+        for j in range(i+1,len_s+1): #### Finding all possible strings in the combination
+            reverse_str=reverse_string(s[i:j]) ####  Finding a reverse string
+            if reverse_str == s[i:j]: #### If there is a match 
+                if len(s[i:j]) not in dict_pal: ### There is no other string of same size then 
+                    dict_pal[len(s[i:j])]=s[i:j] #store it the dictionary
+    return dict_pal[max(dict_pal.keys(),key=int)]  ### return the largest value in the dictionary
+def reverse_string(s): ### This is the function to create a reverse string
     len_s=len(s)
     new_string=""
     for i in range(len_s):
         new_string +=s[len_s-i-1]
     return new_string
 
-def question3(Graph):
-    list_vnn=dict()
-##    list_vnn[0]=[]
-    for Node1 in Graph.keys():
-##        list_vnn[0].append(Node1)
-        for (Node2,weight) in Graph[Node1]:
+print question2("quasi")
+print question2("abracadabra")
+print question2("aba")
+
+print "############################# Question 3 #####################################################"
+
+def question3(Graph): ### Input a graph
+    list_vnn=dict()  ### Create a dictionary
+    for Node1 in Graph.keys(): ### This loop creates a dictionary of weights as key and nodes which it connects in a tuple in a list. 
+        for (Node2,weight) in Graph[Node1]: 
             if weight not in list_vnn:
                 list_vnn[weight]=[]
             list_vnn[weight].append((Node1,Node2))
-    weight_descending_order=sorted(list_vnn.keys())
-    minimum_spanning_tree=dict()
-    for weights in weight_descending_order:
+    weight_descending_order=sorted(list_vnn.keys()) ### The keys are sorted in dictionary
+    minimum_spanning_tree=dict() ## Empty dictionary for minimum spanning tree is created
+    for weights in weight_descending_order: ## In reverse order with smallest weight node first, we select edges and start creating trees. Initially multiple trees are created but they get connected till the end to make one tree
         for list_of_nodes in list_vnn[weights]:
-            minimum_spanning_tree = minimum_spanning_tree_create(minimum_spanning_tree, list_of_nodes[0],list_of_nodes[1],weights)
+            minimum_spanning_tree = minimum_spanning_tree_create(minimum_spanning_tree, list_of_nodes[0],list_of_nodes[1],weights) ## Minimum spanning tree function 
     return minimum_spanning_tree.values()[0]
 
-def minimum_spanning_tree_create(minimum_spanning_tree,vertice1,vertice2,weights):
-    if not minimum_spanning_tree:
+def minimum_spanning_tree_create(minimum_spanning_tree,vertice1,vertice2,weights): ## input to function is minimum_spanning_tree which gets added. It contains two nodes and the weight of the edge between the node
+    if not minimum_spanning_tree: ### Create a minimum spanning tree if there is none and mark it with 1
         minimum_spanning_tree={1:{vertice1:[(vertice2,weights)],vertice2:[(vertice1,weights)]}}
     else:
         tree1 =0
         tree2 =0
-        for trees in minimum_spanning_tree.keys():
+        for trees in minimum_spanning_tree.keys(): ### We have to find two trees which have the node1 and node2. If there is only tree then we are creating a circular tree.
             for vertices in minimum_spanning_tree[trees]:
                 if vertices == vertice1:
                     tree1 = trees
                 if vertices == vertice2:
                     tree2 = trees
-        if tree1 != tree2 :
-            if tree1==0:
+        if tree1 != tree2 : ## check If there are two trees with vertices then you it is not a circular tree
+            if tree1==0: ## if one the tree is empty then create a tree 
                 minimum_spanning_tree[tree2][vertice2].append((vertice1,weights))                
                 minimum_spanning_tree[tree2][vertice1] = [(vertice2,weights)]                
             elif tree2==0:
                 minimum_spanning_tree[tree1][vertice1].append((vertice2,weights))                
                 minimum_spanning_tree[tree1][vertice2] = [(vertice1,weights)]                
-            else:                
+            else: ## check if two different trees are found and the edge connects two trees then connect the trees and create one and store it. Remove the original tree
                 index = max(minimum_spanning_tree.keys())+1
                 minimum_spanning_tree[index]= dict(minimum_spanning_tree[tree1].items() +minimum_spanning_tree[tree2].items())
                 minimum_spanning_tree[index][vertice1].append((vertice2,weights))
                 minimum_spanning_tree[index][vertice2].append((vertice2,weights))
                 minimum_spanning_tree.pop(tree1)
                 minimum_spanning_tree.pop(tree2)
-        elif tree1 == 0 and tree2 == 0:
+        elif tree1 == 0 and tree2 == 0: ## If there is no tree with the two nodes then create a new tree
             index=max(minimum_spanning_tree.keys())+1
             minimum_spanning_tree[index]={vertice1:[(vertice2,weights)],vertice2:[(vertice1,weights)]}
     return minimum_spanning_tree
-class Node1(object):
-  def __init__(self, data):
-    self.data = data
-    self.next = None
-def question5(ll,m):
-    q = collections.deque(ll.data)
-    n = ll.next
-    while n != None:
-        q.append(n.data)
-        n=n.next
-    for i in range(m-1):
-        q.pop()
-    return q.pop()
-"""print question1("prateek","rp")"""
-"""print question2("quasi")"""
+
 Graph1 = {'A': [('B', 2)],
  'B': [('A', 2), ('C', 5)], 
  'C': [('B', 5)]}
@@ -187,44 +114,77 @@ Graph2 = {'A': [('B', 2)],
  'C': [('B', 5),('D',3)],
  'D': [('C',3),('E',2)],
   'E':[('F',7),('B',4)]}
-def question4(T,r,n1,n2):
+Graph3 = {'A': [('B', 2)],
+ 'B': [('A', 2)]}
+
+       
+print question3(Graph1)
+print question3(Graph2)
+print question3(Graph3)
+
+print "############################# Question 5 #####################################################"
+    
+
+class Node1(object):
+    ### This class creates a element in link list.
+  def __init__(self, data):
+    self.data = data
+    self.next = None
+def question5(ll,m): ## This function finds the nth element from the end of the linked list.
+    q = collections.deque(ll.data) ## This function puts the first element of the linked list in the queue
+    n = ll.next  ## This function moves to the next element
+    while n != None: ## Till we reach the last element
+        q.append(n.data) ## We add elements in the queue 
+        n=n.next ### We move on to the next element in the queue
+    for i in range(m-1): ## This step is removing elements from the queue
+        q.pop() 
+    return q.pop() ## Return the nth element of the queue
+
+
+a = Node1('a')
+b = Node1('b')
+h = Node1('h')
+i = Node1('i')
+j = Node1('j')
+c = Node1('c')
+d = Node1('d')
+e = Node1('e')
+f = Node1('f')
+g = Node1('g')
+
+a.next = f
+f.next = g
+h.next = i
+i.next = j
+b.next = c
+c.next = d
+d.next = e
+
+print question5(a,3)
+print question5(d,1)
+print question5(h,2)
+
+
+print "############################# Question 4 #####################################################"
+
+def question4(T,r,n1,n2):  ## This function passes value to the check ancestor function
     return check_ancestor(T,r,n1,n2)
 
 def check_ancestor(T,r,n1,n2):
-    if (n1>r and r>n2) or (n1<r and r<n2):
-        return r
-    first_i = -1
-    second_i = -1
-    for i in len(T[r]):
+    if (n1>r and r>n2) or (n1<r and r<n2): ## Checks for the condition which decides that r is the common ancestor
+        return r ## Returns the value r
+    first_i = -1 ## Setting first_i to a negative value. It is the left chld
+    second_i = -1 ## Setting second_i to a negative value. It is the right child
+    for i in len(T[r]):  ## These steps are to derive the left or the right child from the node r)
         if T[r][i]==1 and first_i !=-1 and second_i !=1:
             first_i=i
         if T[r][i]==1 and first_i >-1 and second_i !=1:
             second_i=i
-    if (n1>r and n2>r):
+    if (n1>r and n2>r): #checks for the condition for selecting the right child
         return check_ancestor(T,second_i,n1,n2)
-    if (n1<r and n2<r):
+    if (n1<r and n2<r): #checks for the condtion for selecting the left child.
         return check_ancestor(T,first_i,n1,n2)
 
-question3(Graph2)
-a = Node1('a')
-b = Node1('b')
-a.next = b
-c = Node1('c')
-b.next = c
-d = Node1('d')
-c.next = d
-e = Node1('e')
-d.next = e
-f = Node1('f')
-e.next = f
-g = Node1('g')
-f.next = g
-h = Node1('h')
-g.next = h
-i = Node1('i')
-h.next = i
-j = Node1('j')
-i.next = j
 
 
 z = [[0,1,0,0,0],
@@ -239,4 +199,4 @@ k = [[0, 1, 0, 0],
     [0, 0, 0, 0]]
 
 print question4(z,3,4,1)
-print question5(a,3)
+print question4(k,1,2,4)
